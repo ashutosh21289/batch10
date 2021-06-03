@@ -1,0 +1,25 @@
+---
+- hosts: all
+  become: true
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  tasks:
+  - name: installing the docker
+    apt:
+      pkg: docker.io
+      state: present
+  - name: now installing python docker version3
+    apt:
+      pkg: python3-docker
+      state: present
+  - name: starting the docker service
+    service:
+      name: docker
+      state: started
+      enabled: true
+  - name: if yes remove the container
+    docker_container:
+      name: bootcampashu
+      state: absent
+  - name: finally deploy devopsbootashu application
+    command: sudo docker run -it -d -p 8888:8888 --name bootcampashu ashutosh21289/devopsdockercontainer:1.0
